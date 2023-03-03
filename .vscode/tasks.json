@@ -1,0 +1,205 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile&Link",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "${workspaceFolder}\\out\\**.o",
+                "-o",
+                "${workspaceFolder}\\bin\\App_Debug.exe",
+                "-L${workspaceFolder}\\lib",
+                // link libraries here
+                "-lglad",
+                "-lglfw3dll",
+                "-lglfw3",
+                "-lopengl32",
+                "-fexec-charset=UTF-8",
+                "-g"
+            ],
+            "group": {
+                "kind": "build"
+                // "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "MoveResources"
+            ]
+        },
+        {
+            "label": "Compile&Link(Release)",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "${workspaceFolder}\\out\\**.o",
+                "-o",
+                "${workspaceFolder}\\bin\\App.exe",
+                "-L${workspaceFolder}\\lib",
+                // link libraries here
+                "-lglad",
+                "-lglfw3dll",
+                "-lglfw3",
+                "-lopengl32",
+                "-fexec-charset=UTF-8",
+                "-O2",
+                "-mwindows"
+            ],
+            "group": {
+                "kind": "build"
+                // "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "MoveResources(R)"
+            ]
+        },
+        {
+            "label": "Compile",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-I${workspaceFolder}\\include",
+                "-c",
+                "$(",
+                "dir",
+                "-Path",
+                "${workspaceFolder}\\src",
+                "-Filter",
+                "*.cc",
+                "-Recurse",
+                "|",
+                "%{$_.FullName}",
+                ")",
+                "-fexec-charset=UTF-8",
+                "-g"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Compile(R)",
+            "type": "shell",
+            "command": "g++.exe",
+            "args": [
+                "-I${workspaceFolder}\\include",
+                "-c",
+                "$(",
+                "dir",
+                "-Path",
+                "${workspaceFolder}\\src",
+                "-Filter",
+                "*.cc",
+                "-Recurse",
+                "|",
+                "%{$_.FullName}",
+                ")",
+                "-fexec-charset=UTF-8",
+                "-O2",
+                "-mwindows"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "MoveMoveOuts",
+            "command": "Move-Item",
+            "args": [
+                "-Path",
+                "${workspaceFolder}\\*.o",
+                "-Destination",
+                "${workspaceFolder}\\out",
+                "-Force"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "Compile"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "MoveResources",
+            "command": "cp",
+            "args": [
+                "-Path",
+                "${workspaceFolder}\\res\\*",
+                "-Destination",
+                "${workspaceFolder}\\bin\\res",
+                "-Force"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "MoveMoveOuts"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "MoveResources(R)",
+            "command": "cp",
+            "args": [
+                "-Path",
+                "${workspaceFolder}\\res\\*",
+                "-Destination",
+                "${workspaceFolder}\\bin\\res",
+                "-Force"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "MoveMoveOuts(R)"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "MoveMoveOuts(R)",
+            "command": "Move-Item",
+            "args": [
+                "-Path",
+                "${workspaceFolder}\\*.o",
+                "-Destination",
+                "${workspaceFolder}\\out",
+                "-Force"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "Compile(R)"
+            ]
+        }
+    ]
+}
